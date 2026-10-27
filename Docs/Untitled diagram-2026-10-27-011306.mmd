@@ -1,0 +1,97 @@
+erDiagram
+    %% =====================================================================
+    %% ARQUITETURA DE DADOS: CAMPEONATO DE NATAÇÃO (Versão Final Otimizada)
+    %% =====================================================================
+
+    CAMPEONATO {
+        int id_campeonato PK "Chave primária do campeonato"
+        string nome_campeonato "Nome oficial do evento (ex: 29º Troféu Alexandre Pussieldi)"
+        int ano_vigente "Ano da competição"
+    }
+
+    CLUBE {
+        int id_clube PK "Chave primária do clube"
+        string sigla UK "Sigla oficial e única (ex: AABB, CRV)"
+        string nome_clube "Nome completo da equipe/clube"
+        string estado "UF de origem"
+    }
+
+    CATEGORIA {
+        int id_categoria PK "Chave primária da categoria"
+        string nome_categoria "Nome (ex: Pré-Mirim, Mirim)"
+        int idade_minima "Idade mínima regulamentar"
+        int idade_maxima "Idade máxima regulamentar"
+    }
+
+    ATLETA {
+        int id_atleta PK "Chave primária do atleta"
+        int id_clube FK "FK para o clube de origem"
+        int id_categoria FK "FK para a faixa etária"
+        string nome_completo "Nome completo do nadador"
+        date data_nascimento "Data de nascimento para validação etária"
+        string genero "Gênero (M/F)"
+    }
+
+    PROVA {
+        int id_prova PK "Chave primária da prova"
+        int id_campeonato FK "FK para o campeonato associado"
+        int numero_prova "Número sequencial no programa oficial"
+        string estilo "Estilo (Livre, Costas, Peito, Borboleta, Medley)"
+        int distancia "Distância em metros (ex: 25, 50, 100)"
+        string genero_prova "Gênero da prova (Masculino/Feminino/Misto)"
+    }
+
+    ETAPA_BATERIA {
+        int id_etapa_bateria PK "Chave primária da fase/bateria"
+        int id_prova FK "FK para a prova"
+        string fase "Fase do evento (Eliminatória, Final A, Final B)"
+        int numero_bateria "Número da série ou bateria na piscina"
+    }
+
+    INSCRICAO {
+        int id_inscricao PK "Chave primária da inscrição individual"
+        int id_atleta FK "FK para o atleta inscrito"
+        int id_prova FK "FK para a prova"
+        time tempo_inscricao "Tempo semente / baliza informado"
+    }
+
+    RESULTADO {
+        int id_resultado PK "Chave primária do resultado oficial"
+        int id_inscricao FK "FK para a inscrição correspondente"
+        int id_etapa_bateria FK "FK para a fase/bateria executada"
+        time tempo_final "Tempo efetivo nadado (Nulo se DSQ/DNS)"
+        int colocacao "Posição final obtida na prova"
+        decimal pontos_obtidos "Pontuação convertida para o clube"
+        string medalha "Tipo de medalha (Ouro, Prata, Bronze, Nenhuma)"
+        string status_participacao "Status operacional: OK, DSQ, DNS, DNF"
+    }
+
+    EQUIPE_REVEZAMENTO {
+        int id_equipe_revezamento PK "Chave primária da equipe de revezamento"
+        int id_clube FK "FK para o clube responsável"
+        int id_prova FK "FK para a prova de revezamento"
+        string identificador_equipe "Diferencia equipes A, B ou C do mesmo clube (ex: Equipe A)"
+    }
+
+    ATLETA_REVEZAMENTO {
+        int id_atleta_revezamento PK "Chave primária do vínculo de revezamento"
+        int id_equipe_revezamento FK "FK para a equipe de revezamento"
+        int id_atleta FK "FK para o atleta nadador"
+        int ordem_nadador "Posição de saída (1º, 2º, 3º ou 4º nadador)"
+    }
+
+    %% =====================================================================
+    %% RELACIONAMENTOS E CARDINALIDADES (Notação Crow's Foot)
+    %% =====================================================================
+    CAMPEONATO ||--o{ PROVA : "contém"
+    CLUBE ||--o{ ATLETA : "possui"
+    CATEGORIA ||--o{ ATLETA : "classifica"
+    ATLETA ||--o{ INSCRICAO : "realiza"
+    PROVA ||--o{ INSCRICAO : "possui"
+    PROVA ||--o{ ETAPA_BATERIA : "divide-se_em"
+    INSCRICAO ||--o{ RESULTADO : "gera"
+    ETAPA_BATERIA ||--o{ RESULTADO : "registra_em"
+    CLUBE ||--o{ EQUIPE_REVEZAMENTO : "monta"
+    PROVA ||--o{ EQUIPE_REVEZAMENTO : "envolve"
+    EQUIPE_REVEZAMENTO ||--o{ ATLETA_REVEZAMENTO : "compõe-se_de"
+    ATLETA ||--o{ ATLETA_REVEZAMENTO : "participa_como"
