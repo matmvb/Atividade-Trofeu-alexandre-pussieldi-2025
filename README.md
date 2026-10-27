@@ -8,6 +8,16 @@ Projeto de engenharia de dados e modelagem relacional desenvolvido para a gestã
 
 ---
 
+## 👥 Integrantes do Grupo
+
+* **MATHEUS DE VASCONCELLOS BARBOSA**
+* **NICOLAS MOURA BATISTA DE LACERDA**
+* **NICOLAS DE LAIA FERREIRA FONSECA**
+* **LUCAS FELIPE DE FREITAS SOARES**
+* **JOÃO PEDRO MENDES DE QUEIROZ**
+
+---
+
 ## 📌 Visão Geral do Projeto
 
 O sistema resolve os desafios de gestão de campeonatos de natação de alta complexidade, abordando:
